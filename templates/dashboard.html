@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="card-wrapper">
+
+    <div class="card">
+
+      <h1 class="center">Dashboard</h1>
+      <p class="center">You are currently logged in.</p>
+
+      <div class="center">
+        <a href="/user/signout" class="btn btn--secondary">Sign Out</a>
+      </div>
+    
+    </div>
+
+    <div class="card">
+
+      <h2 class="center">Your Info</h2>
+
+      <p>
+        <strong>ID:</strong> {{ session['user']['_id'] }}<br>
+        <strong>Name:</strong> {{ session['user']['name'] }}<br>
+        <strong>Email:</strong> {{ session['user']['email'] }}<br>
+        <strong>Home Address:</strong> {{ session['user']['home_address'] }}<br>
+        <strong>Phone Number:</strong> {{ session['user']['phone_number'] }}<br>
+      </p>
+    
+    </div>
+
+    <div class="card">
+      <h1 class="center">Edit an Account</h1>
+      <form name="signup_form">
+          <label for="name">Name</label>
+          <input type="text" name="name" class="field" required>
+
+          <label for="email">Email</label>
+          <input type="email" name="email" class="field" required>
+
+          <label for="password">Password</label>
+          <input type="password" name="password" class="field" required>
+
+          <label for="home_address">Home Address</label>
+          <input type="text" name="home_address" class="field" required>
+
+          <label for="phone_number">Phone Number (xxx-xxx-xxxx)</label>
+          <input type="tel" name="phone_number" class="field" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+
+          <p class="error error--hidden"></p>
+
+          <input type="submit" value="Confirm Changes" class="btn">
+      </form>
+    </div>
+  
+  </div>
+{% endblock %}
