@@ -44,3 +44,74 @@ class User:
             return self.start_session(user)
         
         return jsonify({ "error": "Invalid login credentials. Please try again." }), 401
+
+class Product:
+
+    def initialize_products():
+
+        product = {
+            "_id": "1",
+            "name": "Apple",
+            "category": "fruit",
+            "price": "null",
+            "pricePerPound": 4.00,
+            "weight": .25
+        }
+        if not db.products.find_one({ "_id": "1"}):
+            db.products.insert_one(product)
+        else: 
+            db.products.replace_one({"_id": "1"}, product)
+
+        product = {
+            "_id": "2",
+            "name": "Banana",
+            "category": "fruit",
+            "price": "null",
+            "pricePerPound": 1.50,
+            "weight": .20
+        }
+        if not db.products.find_one({ "_id": "2"}):
+            db.products.insert_one(product)
+        else: 
+            db.products.replace_one({"_id": "2"}, product)
+        
+        product = {
+            "_id": "3",
+            "name": "Orange",
+            "category": "fruit",
+            "price": "null",
+            "pricePerPound": 3.00,
+            "weight": .33
+        }
+        if not db.products.find_one({ "_id": "3"}):
+            db.products.insert_one(product)
+        else: 
+            db.products.replace_one({"_id": "3"}, product) 
+
+        product = {
+            "_id": "4",
+            "name": "Blueberries",
+            "category": "fruit",
+            "price": 4.00,
+            "pricePerPound": "null",
+            "weight": .5
+        }
+        if not db.products.find_one({ "_id": "4"}):
+            db.products.insert_one(product)
+        else: 
+            db.products.replace_one({"_id": "4"}, product)
+
+        product = {
+            "_id": "5",
+            "name": "Bread",
+            "category": "grains",
+            "price": 3.00,
+            "pricePerPound": "null",
+            "weight": 1
+        }
+        if not db.products.find_one({ "_id": "5"}):
+            db.products.insert_one(product)
+        else: 
+            db.products.replace_one({"_id": "5"}, product)
+
+        return 0

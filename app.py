@@ -37,3 +37,15 @@ def dashboard():
 @login_required
 def account():
     return render_template('account.html')
+
+@app.route('/product/<name>')
+def product(name):
+    productInfo = db.products.find_one({ "_id": (name)})
+    
+    idInfo = str(productInfo["_id"])
+    nameIn = str(productInfo["name"])
+    categoryIn = str(productInfo["category"])
+    priceIn = str(productInfo["price"])
+    pricePerPoundIn = str(productInfo["pricePerPound"])
+    weightIn = str(productInfo["weight"])
+    return render_template('product.html', id=idInfo, name=nameIn, category=categoryIn, price=priceIn, pricePerPound=pricePerPoundIn, weight=weightIn )
