@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login System</title>
+
+    <link rel="stylesheet" href="/static/css/normalize.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
+
+    <script>
+         function search() {
+            var link = "/search/" + document.getElementById("product_name").value;
+            window.location.href = link;
+            return false;
+        };
+    </script>
+
+</head>
+<body>
+
+    <div>
+        <h1 class="center">Grocery</h1>
+
+        <div class="center">
+            <form name="search_box">
+                <input type="text" id="product_name" placeholder="Search Products">
+                <button type="reset" onclick="search()">Search</button>
+            </form>
+        </div>
+        <br>
+
+        <div>
+            <table style="margin-left:auto;margin-right:auto;width:50%" border=1 frame=void rules=rows>
+                <col style="width:25%">
+                <col style="width:10%">
+                <col style="width:15%">
+
+                <thead style="background-color:#808080;color:#fff;">
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                {% for product in products %}
+                    <tr bgcolor="white">
+                        <td>
+                            <a href="/product/{{product._id}}" style="text-decoration:none;">{{ product.name }}</a>
+                        </td>
+
+                        <td class="center">{{ product.price }}</td>
+
+                        <td class="center">
+                            <button type="submit">Add to Cart</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/scripts.js"></script>
+
+</body>
+</html>

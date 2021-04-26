@@ -4,6 +4,7 @@ import pymongo
 import urllib
 import uuid
 from bson.objectid import ObjectId
+import re
 
 app = Flask(__name__)
 app.secret_key = 'THIS_IS_MY_SECRET_KEY'
@@ -78,3 +79,39 @@ def delete_completed():
 def delete_all():
     db.pantry_items.delete_many({})
     return redirect(url_for('pantry'))
+
+@app.route('/grocery/')
+@login_required
+def showAll():
+    products = []
+    collection = db['products']
+    cursor = collection.find({})
+    for p in cursor:
+        product = {
+            "_id": p["_id"],
+            "name": p["name"],
+            "category": p["category"],
+            "price": p["price"],
+            "pricePerPound": p["pricePerPound"],
+            "weight": p["weight"]
+        }
+        products.append(product)
+    return render_template('grocery.html', products=products)
+
+@app.route('/search/<name>')
+@login_required
+def search(name):
+    products = []
+    collection = db['products']
+    cursor = collection.find({"name": re.compile('^' + name + '$', re.IGNORECASE)})
+    for p in cursor:
+        product = {
+            "_id": p["_id"],
+            "name": p["name"],
+            "category": p["category"],
+            "price": p["price"],
+            "pricePerPound": p["pricePerPound"],
+            "weight": p["weight"]
+        }
+        products.append(product)
+    return render_template('grocery.html', products=products)
