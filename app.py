@@ -1,7 +1,9 @@
-from flask import Flask, render_template, redirect, session
+from flask import Flask, render_template, redirect, session, url_for, request
 from functools import wraps
 import pymongo
 import urllib
+import uuid
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 app.secret_key = 'THIS_IS_MY_SECRET_KEY'
@@ -49,3 +51,30 @@ def product(name):
     pricePerPoundIn = str(productInfo["pricePerPound"])
     weightIn = str(productInfo["weight"])
     return render_template('product.html', id=idInfo, name=nameIn, category=categoryIn, price=priceIn, pricePerPound=pricePerPoundIn, weight=weightIn )
+
+@app.route('/pantry')
+def pantry():
+    return render_template('pantry.html')
+
+@app.route('/add', methods=['POST'])
+def add_item():
+    new_item = request.form.get('new-item')
+    db.pantry_items.insert_one({'text' : new_item, 'complete' : False})
+    return redirect(url_for('pantry'))
+
+@app.route('/complete/<oid>')
+def complete(oid):
+    item = db.pantry_items.find_one({'_id': ObjectId(oid)})
+    item['complete'] = True
+    db.pantry_items.save(item)
+    return redirect(url_for('pantry'))
+
+@app.route('/delete_completed')
+def delete_completed():
+    db.pantry_items.delete_many({'complete' : True})
+    return redirect(url_for('pantry'))
+
+@app.route('/delete_all')
+def delete_all():
+    db.pantry_items.delete_many({})
+    return redirect(url_for('pantry'))
