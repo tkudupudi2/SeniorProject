@@ -9,6 +9,10 @@ class User:
         del user['password']
         session['logged_in'] = True
         session['user'] = user
+        # remove comments to experiment
+        #self.add_to_cart("2", 8)
+        #self.add_to_cart("1", 300)
+        #self.remove_from_cart("1", 50)
         return jsonify(user), 200
 
     def signup(self):
@@ -45,6 +49,74 @@ class User:
         
         return jsonify({ "error": "Invalid login credentials. Please try again." }), 401
 
+    def add_to_cart(self, product, quantity):
+        
+        # CALL THIS METHOD WITH FORM: add_to_cart("1", 45) where "1" STRING FORMAT represents product number, 45 INT FORMAT represents quantity
+        # self is not taken as a parameter in the method statement
+        # insert:     self.add_to_cart("1", 45)    right before the return statement in start_session (line 12) to test
+
+        userID = session['user']['_id']
+
+        # create cart document for user if one doesn't exist
+        if not db.carts.find_one({"_id": userID}):
+            db.carts.insert_one({"_id": userID, "totalQuantity": 0})
+        
+        # check if item already has a listing in the cart, if positive or zero, add to current value, if negative list new fresh quantity
+        # if item isn't listed in cart yet, add new value to user's cart
+        try:
+            cartItem = db.carts.find_one({"_id": userID})[product]
+        except KeyError:
+            db.carts.update_one({"_id": userID}, {"$set": {product:{"quantity": quantity}}})
+        else:
+            cartItemQuantity = cartItem.get('quantity',[])
+            if cartItemQuantity >= 0:
+                newQuantity = cartItemQuantity + quantity
+                db.carts.update_one({"_id": userID}, {"$set": {product: {"quantity":newQuantity}}})
+            else:
+                db.carts.update_one({"_id": userID}, {"$set": {product: {"quantity":quantity}}})
+        
+        # find current total quantity, add incoming quantity, then update
+        cartQuantity = db.carts.find_one({"_id": userID})["totalQuantity"]
+        cartQuantity = cartQuantity + quantity
+        db.carts.update_one({"_id": userID}, {"$set": {"totalQuantity": cartQuantity }})
+
+        return 0
+
+    def remove_from_cart(self, product, quantity):
+
+        # blah blah same idea as above too lazy to comment everything
+        userID = session['user']['_id']
+        cartQuantity = db.carts.find_one({"_id": userID})["totalQuantity"]
+
+        try:
+            cartItem = db.carts.find_one({"_id": userID})[product]
+        except KeyError:
+            haha = "hehe"
+            # can't leave this blank but also can't remove it entirely   :?
+        
+        else:
+            cartItemQuantity = cartItem.get('quantity',[])
+            if(cartItemQuantity >= quantity):
+                newQuantity = cartItemQuantity - quantity
+                db.carts.update_one({"_id": userID}, {"$set": {product: {"quantity":newQuantity}}})
+                cartQuantity = cartQuantity - quantity
+                db.carts.update_one({"_id": userID}, {"$set": {"totalQuantity": cartQuantity }})
+            else:
+                db.carts.update_one({"_id": userID}, {"$set": {product: {"quantity":0}}})
+                cartQuantity = cartQuantity - cartItemQuantity
+                db.carts.update_one({"_id": userID}, {"$set": {"totalQuantity": cartQuantity }})
+        
+        return 0
+
+    def empty_cart(self):
+
+        userID = session['user']['_id']
+
+        # delete cart document (new one will be made when next item is added, cart total quantity reset to 0 upon doing so)
+        db.carts.remove({"_id": userID})
+
+        return 0
+
 class Product:
 
     def initialize_products():
@@ -53,8 +125,8 @@ class Product:
             "_id": "1",
             "name": "Apple",
             "category": "fruit",
-            "price": "null",
-            "pricePerPound": 4.00,
+            "price": 1.00,
+            "pricePerPound": "null",
             "weight": .25
         }
         if not db.products.find_one({ "_id": "1"}):
@@ -66,8 +138,8 @@ class Product:
             "_id": "2",
             "name": "Banana",
             "category": "fruit",
-            "price": "null",
-            "pricePerPound": 1.50,
+            "price": .30,
+            "pricePerPound": "null",
             "weight": .20
         }
         if not db.products.find_one({ "_id": "2"}):
@@ -79,8 +151,8 @@ class Product:
             "_id": "3",
             "name": "Orange",
             "category": "fruit",
-            "price": "null",
-            "pricePerPound": 3.00,
+            "price": 1.00,
+            "pricePerPound": "null",
             "weight": .33
         }
         if not db.products.find_one({ "_id": "3"}):
