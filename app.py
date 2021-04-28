@@ -36,11 +36,6 @@ def home():
 def dashboard():
     return render_template('dashboard.html')
 
-@app.route('/account/')
-@login_required
-def account():
-    return render_template('account.html')
-
 @app.route('/product/<name>')
 def product(name):
     productInfo = db.products.find_one({ "_id": (name)})
@@ -53,18 +48,21 @@ def product(name):
     weightIn = str(productInfo["weight"])
     return render_template('product.html', id=idInfo, name=nameIn, category=categoryIn, price=priceIn, pricePerPound=pricePerPoundIn, weight=weightIn )
 
-@app.route('/pantry')
+@app.route('/user/pantry')
+@login_required
 def pantry():
     return render_template('pantry.html')
 
 @app.route('/add', methods=['POST'])
 def add_item():
     new_item = request.form.get('new-item')
-    db.pantry_items.insert_one({'text' : new_item, 'complete' : False})
+    userID = session['user']['_id']
+    db.pantry_items.insert_one({'user_id': userID, 'text' : new_item, 'complete' : False})
     return redirect(url_for('pantry'))
 
 @app.route('/complete/<oid>')
 def complete(oid):
+    userID = session['user']['_id']
     item = db.pantry_items.find_one({'_id': ObjectId(oid)})
     item['complete'] = True
     db.pantry_items.save(item)
@@ -77,7 +75,8 @@ def delete_completed():
 
 @app.route('/delete_all')
 def delete_all():
-    db.pantry_items.delete_many({})
+    userID = session['user']['_id']
+    db.pantry_items.delete_many({'user_id': userID})
     return redirect(url_for('pantry'))
 
 @app.route('/grocery/')

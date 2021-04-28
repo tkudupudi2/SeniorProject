@@ -48,6 +48,20 @@ class User:
             return self.start_session(user)
         
         return jsonify({ "error": "Invalid login credentials. Please try again." }), 401
+    
+    def account(self):
+        userID = session['user']['_id']
+        user = db.users.find_one({'_id': userID})
+        user['name'] = request.form.get('name')
+        user['email'] = request.form.get('email')
+        user['password'] = request.form.get('password')
+        user['home_address'] = request.form.get('home_address')
+        user['phone_number'] = request.form.get('phone_number')
+        db.users.save(user)
+        return redirect('/dashboard/')
+        
+    def pantry(self):
+        return redirect('/pantry')
 
     def add_to_cart(self, product, quantity):
         
