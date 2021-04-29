@@ -1,6 +1,8 @@
 from flask import Flask, render_template, redirect, session, url_for, request
 from functools import wraps
 import pymongo
+from flask_pymongo import PyMongo
+from pymongo import MongoClient
 import urllib
 import uuid
 from bson.objectid import ObjectId
@@ -9,7 +11,15 @@ import re
 app = Flask(__name__)
 app.secret_key = 'THIS_IS_MY_SECRET_KEY'
 
-#Database
+
+#Atlas Database
+
+#client = pymongo.MongoClient("mongodb+srv://admin:Password@cluster0.tamvy.mongodb.net/user_profile?retryWrites=true&w=majority")
+#db = client.user_profile
+
+
+#Localhost Database
+
 #brew services start mongodb-community@4.4
 #brew services stop mongodb-community@4.4
 client = pymongo.MongoClient('localhost', 27017)
@@ -51,7 +61,9 @@ def product(name):
 @app.route('/user/pantry')
 @login_required
 def pantry():
-    return render_template('pantry.html')
+    userID = session['user']['_id']
+    pantry_items = db.pantry_items.find({'user_id': userID})
+    return render_template('pantry.html', pantry_items = pantry_items)
 
 @app.route('/add', methods=['POST'])
 def add_item():

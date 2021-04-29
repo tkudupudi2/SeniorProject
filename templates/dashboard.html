@@ -29,7 +29,6 @@
       <h2 class="center">Your Info</h2>
 
       <p>
-        <strong>ID:</strong> {{ session['user']['_id'] }}<br>
         <strong>Name:</strong> {{ session['user']['name'] }}<br>
         <strong>Email:</strong> {{ session['user']['email'] }}<br>
         <strong>Home Address:</strong> {{ session['user']['home_address'] }}<br>
@@ -37,7 +36,7 @@
       </p>
     
     </div>
-
+    <!-- Commented it out because still WIP
     <div class="card">
       <h1 class="center">Edit Account</h1>
       <form name="account_form">
@@ -61,6 +60,7 @@
           <input type="submit" value="Confirm Changes" class="btn">
       </form>
     </div>
+    -->
   
   </div>
 {% endblock %}
