@@ -59,9 +59,6 @@ class User:
         user['phone_number'] = request.form.get('phone_number')
         db.users.save(user)
         return redirect('/dashboard/')
-        
-    def pantry(self):
-        return redirect('/pantry')
 
     def add_to_cart(self, product, quantity):
         
