@@ -6,17 +6,19 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Login System</title>
+    <title>Grass</title>
 
     <link rel="stylesheet" href="/static/css/normalize.css">
     <link rel="stylesheet" href="/static/css/styles.css">
 
     <script>
          function search() {
-            var link = "/search/" + document.getElementById("product_name").value;
-            window.location.href = link;
+            if (document.getElementById("product_name").value !== "") {
+                var link = "/search/" + document.getElementById("product_name").value;
+                window.location.href = link;
+            }
             return false;
-        };
+         };
     </script>
 
 </head>
@@ -28,7 +30,7 @@
         <div class="center">
             <form name="search_box">
                 <input type="text" id="product_name" placeholder="Search Products">
-                <button type="reset" onclick="search()">Search</button>
+                <button type="button" onclick="search()">Search</button>
             </form>
         </div>
         <br>
@@ -53,7 +55,7 @@
                             <a href="/product/{{product._id}}" style="text-decoration:none;">{{ product.name }}</a>
                         </td>
 
-                        <td class="center">{{ product.price }}</td>
+                        <td class="center">${{ product.price }}</td>
 
                         <td class="center">
                             <button type="submit">Add to Cart</button>
@@ -62,6 +64,11 @@
                 {% endfor %}
 
             </table>
+        </div>
+        <br>
+        
+        <div class="center">
+            <a href="/dashboard" class="btn">Home</a>
         </div>
     </div>
 

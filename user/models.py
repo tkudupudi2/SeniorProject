@@ -197,4 +197,43 @@ class Product:
         else: 
             db.products.replace_one({"_id": "5"}, product)
 
+        product = {
+            "_id": "6",
+            "name": "Strawberries",
+            "category": "fruit",
+            "price": 3.00,
+            "pricePerPound": "null",
+            "weight": .5
+        }
+        if not db.products.find_one({"_id": "6"}):
+            db.products.insert_one(product)
+        else:
+            db.products.replace_one({"_id": "6"}, product)
+
+        product = {
+            "_id": "7",
+            "name": "Blackberries",
+            "category": "fruit",
+            "price": 3.50,
+            "pricePerPound": "null",
+            "weight": .5
+        }
+        if not db.products.find_one({"_id": "7"}):
+            db.products.insert_one(product)
+        else:
+            db.products.replace_one({"_id": "7"}, product)
+
+        product = {
+            "_id": "8",
+            "name": "Pineapple",
+            "category": "fruit",
+            "price": 2.50,
+            "pricePerPound": "null",
+            "weight": 1
+        }
+        if not db.products.find_one({"_id": "8"}):
+            db.products.insert_one(product)
+        else:
+            db.products.replace_one({"_id": "8"}, product)
+
         return 0

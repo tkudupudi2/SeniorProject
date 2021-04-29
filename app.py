@@ -86,11 +86,12 @@ def showAll():
     collection = db['products']
     cursor = collection.find({})
     for p in cursor:
+        formatted_price = format(p["price"], '.2f')
         product = {
             "_id": p["_id"],
             "name": p["name"],
             "category": p["category"],
-            "price": p["price"],
+            "price": formatted_price,
             "pricePerPound": p["pricePerPound"],
             "weight": p["weight"]
         }
@@ -102,13 +103,14 @@ def showAll():
 def search(name):
     products = []
     collection = db['products']
-    cursor = collection.find({"name": re.compile('^' + name + '$', re.IGNORECASE)})
+    cursor = collection.find({"name": re.compile('.*' + name + '.*', re.IGNORECASE)})
     for p in cursor:
+        formatted_price = format(p["price"], '.2f')
         product = {
             "_id": p["_id"],
             "name": p["name"],
             "category": p["category"],
-            "price": p["price"],
+            "price": formatted_price,
             "pricePerPound": p["pricePerPound"],
             "weight": p["weight"]
         }
