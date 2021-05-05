@@ -1,0 +1,1 @@
+{"ast":null,"code":"export const toErrorMap = errors => {\n  const errorMap = {};\n  errors.forEach(({\n    field,\n    message\n  }) => {\n    errorMap[field] = message;\n  });\n  return errorMap;\n};","map":null,"metadata":{},"sourceType":"module"}

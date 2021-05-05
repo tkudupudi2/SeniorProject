@@ -1,0 +1,1 @@
+{"ast":null,"code":"export var toErrorMap = function toErrorMap(errors) {\n  var errorMap = {};\n  errors.forEach(function (_ref) {\n    var field = _ref.field,\n        message = _ref.message;\n    errorMap[field] = message;\n  });\n  return errorMap;\n};","map":null,"metadata":{},"sourceType":"module"}

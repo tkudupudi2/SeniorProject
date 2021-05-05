@@ -1,0 +1,1 @@
+{"ast":null,"code":"export function betterUpdateQuery(cache, qi, result, fn) {\n  return cache.updateQuery(qi, data => fn(result, data));\n}","map":null,"metadata":{},"sourceType":"module"}
