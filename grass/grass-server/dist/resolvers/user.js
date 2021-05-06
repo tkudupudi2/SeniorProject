@@ -39,10 +39,6 @@ __decorate([
     type_graphql_1.Field(),
     __metadata("design:type", String)
 ], UsernamePasswordInput.prototype, "password", void 0);
-__decorate([
-    type_graphql_1.Field(),
-    __metadata("design:type", String)
-], UsernamePasswordInput.prototype, "email", void 0);
 UsernamePasswordInput = __decorate([
     type_graphql_1.InputType()
 ], UsernamePasswordInput);
@@ -108,7 +104,6 @@ let UserResolver = class UserResolver {
             const user = em.create(User_1.User, {
                 username: options.username,
                 password: hashedPassword,
-                email: options.email,
                 created_at: new Date(),
                 updated_at: new Date(),
             });

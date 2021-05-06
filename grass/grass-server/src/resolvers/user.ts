@@ -18,8 +18,6 @@ class UsernamePasswordInput {
   username: string;
   @Field()
   password: string;
-  @Field()
-  email: string;
 }
 
 @ObjectType()
@@ -83,7 +81,6 @@ export class UserResolver {
     const user = em.create(User, {
       username: options.username,
       password: hashedPassword,
-      email: options.email,
       created_at: new Date(),
       updated_at: new Date(),
     });
