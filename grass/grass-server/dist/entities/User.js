@@ -36,6 +36,7 @@ __decorate([
 __decorate([
     type_graphql_1.Field(() => String),
     core_1.Property({ type: "text" }),
+    core_1.Unique(),
     __metadata("design:type", String)
 ], User.prototype, "username", void 0);
 __decorate([

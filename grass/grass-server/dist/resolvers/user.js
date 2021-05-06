@@ -104,25 +104,21 @@ let UserResolver = class UserResolver {
             const user = em.create(User_1.User, {
                 username: options.username,
                 password: hashedPassword,
-                created_at: new Date(),
-                updated_at: new Date(),
             });
             try {
-                const data = yield em.nativeInsert(user);
-                console.log(data);
+                yield em.persistAndFlush(user);
             }
             catch (err) {
-                if (err.detail.includes("already exists")) {
+                if (err.code === 11000) {
                     return {
                         errors: [
                             {
                                 field: "username",
-                                message: "username already exists",
+                                message: "username has already been taken",
                             },
                         ],
                     };
                 }
-                console.log(err);
             }
             return { user };
         });
