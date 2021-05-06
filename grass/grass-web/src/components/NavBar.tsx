@@ -31,6 +31,7 @@ import {
   RepeatIcon,
   SettingsIcon,
 } from "@chakra-ui/icons";
+import { RiLogoutBoxRLine } from "react-icons/ri";
 import {
   BsFillHouseDoorFill,
   BsPuzzleFill,
@@ -78,7 +79,7 @@ export const NavBar = () => {
           }}
           color="white"
           size="xs"
-          as={SettingsIcon}
+          as={RiLogoutBoxRLine}
           mt={0.5}
         />
       </Center>
