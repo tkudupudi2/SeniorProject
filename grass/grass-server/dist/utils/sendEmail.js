@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendEmail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
-function sendEmail(to, text) {
+function sendEmail(to, html) {
     return __awaiter(this, void 0, void 0, function* () {
         let transporter = nodemailer_1.default.createTransport({
             host: "smtp.ethereal.email",
@@ -29,7 +29,7 @@ function sendEmail(to, text) {
             from: '"Fred Foo 👻" <foo@example.com>',
             to: to,
             subject: "Change password",
-            text,
+            html: html,
         });
         console.log("Message sent: %s", info.messageId);
         console.log("Preview URL: %s", nodemailer_1.default.getTestMessageUrl(info));

@@ -6,24 +6,26 @@ import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "./resolvers/user";
-import redis from "redis";
+import Redis from "ioredis";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import { MyContext } from "./types";
 import cors from "cors";
 import { ProductResolver } from "./resolvers/product";
 import { sendEmail } from "./utils/sendEmail";
+import { User } from "./entities/User";
 
 const main = async () => {
   sendEmail("bob@bob.com", "hello there");
   const orm = await MikroORM.init(microConfig);
+  //await orm.em.nativeDelete(User, {});
   //await orm.getMigrator().up();
   await orm.em.getDriver().createCollections();
 
   const app = express();
 
   const RedisStore = connectRedis(session);
-  let redisClient = redis.createClient();
+  let redis = new Redis();
   app.use(
     cors({
       origin: "http://localhost:3000",
@@ -33,7 +35,7 @@ const main = async () => {
   app.use(
     session({
       name: COOKIE_NAME,
-      store: new RedisStore({ client: redisClient, disableTouch: true }),
+      store: new RedisStore({ client: redis, disableTouch: true }),
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
         httpOnly: true,
@@ -51,7 +53,7 @@ const main = async () => {
       resolvers: [UserResolver, ProductResolver],
       validate: false,
     }),
-    context: ({ req, res }): MyContext => ({ em: orm.em, req, res }),
+    context: ({ req, res }): MyContext => ({ em: orm.em, req, res, redis }),
   });
 
   apolloServer.applyMiddleware({
