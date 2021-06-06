@@ -10,67 +10,63 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Product = void 0;
-const core_1 = require("@mikro-orm/core");
+const typeorm_1 = require("typeorm");
 const type_graphql_1 = require("type-graphql");
-let Product = class Product {
-    constructor() {
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
-    }
+let Product = class Product extends typeorm_1.BaseEntity {
 };
 __decorate([
     type_graphql_1.Field(),
-    core_1.PrimaryKey(),
-    __metadata("design:type", String)
-], Product.prototype, "_id", void 0);
+    typeorm_1.PrimaryGeneratedColumn(),
+    __metadata("design:type", Number)
+], Product.prototype, "id", void 0);
 __decorate([
     type_graphql_1.Field(() => String),
-    core_1.Property({ type: "date" }),
-    __metadata("design:type", Object)
+    typeorm_1.CreateDateColumn(),
+    __metadata("design:type", Date)
 ], Product.prototype, "createdAt", void 0);
 __decorate([
     type_graphql_1.Field(() => String),
-    core_1.Property({ type: "date", onUpdate: () => new Date() }),
-    __metadata("design:type", Object)
+    typeorm_1.UpdateDateColumn(),
+    __metadata("design:type", Date)
 ], Product.prototype, "updatedAt", void 0);
 __decorate([
     type_graphql_1.Field(),
-    core_1.Property({ type: "text" }),
+    typeorm_1.Column(),
     __metadata("design:type", String)
 ], Product.prototype, "name", void 0);
 __decorate([
     type_graphql_1.Field(),
-    core_1.Property({ type: "text" }),
+    typeorm_1.Column(),
     __metadata("design:type", String)
 ], Product.prototype, "category", void 0);
 __decorate([
     type_graphql_1.Field(),
-    core_1.Property({ type: "text" }),
+    typeorm_1.Column(),
     __metadata("design:type", String)
 ], Product.prototype, "image", void 0);
 __decorate([
     type_graphql_1.Field(),
-    core_1.Property({ type: "text" }),
+    typeorm_1.Column(),
     __metadata("design:type", String)
 ], Product.prototype, "storeName", void 0);
 __decorate([
     type_graphql_1.Field(() => type_graphql_1.Float),
-    core_1.Property({ type: "number" }),
+    typeorm_1.Column(),
     __metadata("design:type", Number)
 ], Product.prototype, "price", void 0);
 __decorate([
     type_graphql_1.Field(),
-    core_1.Property({ type: "number", nullable: true }),
+    typeorm_1.Column({ nullable: true }),
     __metadata("design:type", Number)
 ], Product.prototype, "pricePerPound", void 0);
 __decorate([
     type_graphql_1.Field(),
-    core_1.Property({ type: "number", nullable: true }),
+    typeorm_1.Column({ nullable: true }),
     __metadata("design:type", Number)
 ], Product.prototype, "weight", void 0);
 Product = __decorate([
     type_graphql_1.ObjectType(),
-    core_1.Entity()
+    typeorm_1.Entity()
 ], Product);
 exports.Product = Product;
 //# sourceMappingURL=Product.js.map

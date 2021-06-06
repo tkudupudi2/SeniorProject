@@ -7,6 +7,8 @@ import {
   FormErrorMessage,
   Box,
   Button,
+  Link,
+  Flex,
 } from "@chakra-ui/react";
 import { Wrapper } from "../components/Wrapper";
 import { InputField } from "../components/InputField";
@@ -15,6 +17,7 @@ import { toErrorMap } from "../utils/toErrorMap";
 import { useRouter } from "next/router";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { withUrqlClient } from "next-urql";
+import NextLink from "next/link";
 
 interface registerProps {}
 const Login: React.FC<{}> = ({}) => {
@@ -49,6 +52,13 @@ const Login: React.FC<{}> = ({}) => {
                 type="password"
               />
             </Box>
+            <Flex>
+              <NextLink href="/forgot-password">
+                <Link ml="auto" mt={2}>
+                  forgot password?
+                </Link>
+              </NextLink>
+            </Flex>
             <Button
               mt={4}
               type="submit"

@@ -1,46 +1,54 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import {
+  Entity,
+  Column,
+  UpdateDateColumn,
+  CreateDateColumn,
+  BaseEntity,
+  ObjectIdColumn,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Field, Float, ObjectType } from "type-graphql";
 
 @ObjectType()
 @Entity()
-export class Product {
+export class Product extends BaseEntity {
   @Field()
-  @PrimaryKey()
-  _id!: string;
+  @PrimaryGeneratedColumn()
+  id!: number;
 
   @Field(() => String)
-  @Property({ type: "date" })
-  createdAt = new Date();
+  @CreateDateColumn()
+  createdAt: Date;
 
   @Field(() => String)
-  @Property({ type: "date", onUpdate: () => new Date() })
-  updatedAt = new Date();
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @Field()
-  @Property({ type: "text" })
+  @Column()
   name!: string;
 
   @Field()
-  @Property({ type: "text" })
+  @Column()
   category!: string;
 
   @Field()
-  @Property({ type: "text" })
+  @Column()
   image!: string;
 
   @Field()
-  @Property({ type: "text" })
+  @Column()
   storeName!: string;
 
   @Field(() => Float)
-  @Property({ type: "number" })
+  @Column()
   price!: number;
 
   @Field()
-  @Property({ type: "number", nullable: true })
+  @Column({ nullable: true })
   pricePerPound?: number;
 
   @Field()
-  @Property({ type: "number", nullable: true })
+  @Column({ nullable: true })
   weight?: number;
 }

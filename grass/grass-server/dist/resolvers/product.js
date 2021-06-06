@@ -25,65 +25,57 @@ exports.ProductResolver = void 0;
 const type_graphql_1 = require("type-graphql");
 const Product_1 = require("../entities/Product");
 let ProductResolver = class ProductResolver {
-    product(_id, { em }) {
-        return em.findOne(Product_1.Product, { _id: _id });
+    products() {
+        return Product_1.Product.find();
     }
-    products({ em }) {
-        return em.find(Product_1.Product, {});
+    product(id) {
+        return Product_1.Product.findOne(id);
     }
-    createProduct(name, price, image, storeName, category, pricePerPound, weight, { em }) {
+    createProduct(name, price, image, storeName, category, pricePerPound, weight) {
         return __awaiter(this, void 0, void 0, function* () {
-            const product = em.create(Product_1.Product, {
-                name: name,
-                price: price,
-                image: image,
-                storeName: storeName,
-                pricePerPound: pricePerPound,
-                weight: weight,
-                category: category,
-            });
-            yield em.persistAndFlush(product);
-            return product;
+            return Product_1.Product.create({
+                name,
+                price,
+                image,
+                storeName,
+                category,
+                pricePerPound,
+                weight,
+            }).save();
         });
     }
-    updateProduct(_id, name, price, image, storeName, { em }) {
+    updateProduct(id, name, price, image, storeName) {
         return __awaiter(this, void 0, void 0, function* () {
-            const product = yield em.findOne(Product_1.Product, { _id });
+            const product = yield Product_1.Product.findOne(id);
             if (!product) {
                 return null;
             }
             if (typeof name !== "undefined") {
-                product.name = name;
-                product.price = price;
-                product.image = image;
-                product.storeName = storeName;
-                yield em.persistAndFlush(product);
+                yield Product_1.Product.update({ id }, { name, price, image, storeName });
             }
             return product;
         });
     }
-    deleteProduct(_id, { em }) {
+    deleteProduct(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield em.nativeDelete(Product_1.Product, { _id });
+            yield Product_1.Product.delete(id);
             return true;
         });
     }
 };
 __decorate([
-    type_graphql_1.Query(() => Product_1.Product, { nullable: true }),
-    __param(0, type_graphql_1.Arg("_id")),
-    __param(1, type_graphql_1.Ctx()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
-    __metadata("design:returntype", Promise)
-], ProductResolver.prototype, "product", null);
-__decorate([
     type_graphql_1.Query(() => [Product_1.Product]),
-    __param(0, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], ProductResolver.prototype, "products", null);
+__decorate([
+    type_graphql_1.Query(() => [Product_1.Product]),
+    __param(0, type_graphql_1.Arg("id")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ProductResolver.prototype, "product", null);
 __decorate([
     type_graphql_1.Mutation(() => Product_1.Product),
     __param(0, type_graphql_1.Arg("name")),
@@ -93,29 +85,26 @@ __decorate([
     __param(4, type_graphql_1.Arg("category")),
     __param(5, type_graphql_1.Arg("pricePerPound", { nullable: true })),
     __param(6, type_graphql_1.Arg("weight", { nullable: true })),
-    __param(7, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number, String, String, String, Number, Number, Object]),
+    __metadata("design:paramtypes", [String, Number, String, String, String, Number, Number]),
     __metadata("design:returntype", Promise)
 ], ProductResolver.prototype, "createProduct", null);
 __decorate([
     type_graphql_1.Mutation(() => Product_1.Product, { nullable: true }),
-    __param(0, type_graphql_1.Arg("_id")),
+    __param(0, type_graphql_1.Arg("id")),
     __param(1, type_graphql_1.Arg("name")),
     __param(2, type_graphql_1.Arg("price")),
     __param(3, type_graphql_1.Arg("image")),
     __param(4, type_graphql_1.Arg("storeName")),
-    __param(5, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, Number, String, String, Object]),
+    __metadata("design:paramtypes", [Number, String, Number, String, String]),
     __metadata("design:returntype", Promise)
 ], ProductResolver.prototype, "updateProduct", null);
 __decorate([
     type_graphql_1.Mutation(() => Boolean),
-    __param(0, type_graphql_1.Arg("_id")),
-    __param(1, type_graphql_1.Ctx()),
+    __param(0, type_graphql_1.Arg("id")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ProductResolver.prototype, "deleteProduct", null);
 ProductResolver = __decorate([

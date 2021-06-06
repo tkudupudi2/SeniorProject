@@ -74,7 +74,7 @@ const Index = () => {
                         fill="green"
                         boxSize="150px"
                         objectFit="scale-down"
-                        src="https://freepngimg.com/thumb/apple_fruit/24632-1-apple-fruit-transparent.png"
+                        src={p.image}
                         fallbackSrc={p.image}
                         alt={p.name}
                       />

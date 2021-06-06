@@ -1,5 +1,5 @@
 fragment RegularProduct on Product {
-  _id
+  id
   name
   price
   storeName

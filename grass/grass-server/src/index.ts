@@ -1,7 +1,5 @@
-import { MikroORM } from "@mikro-orm/core";
 import "reflect-metadata";
 import { COOKIE_NAME, __prod__ } from "./constants";
-import microConfig from "./mikro-orm.config";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
@@ -14,13 +12,21 @@ import cors from "cors";
 import { ProductResolver } from "./resolvers/product";
 import { sendEmail } from "./utils/sendEmail";
 import { User } from "./entities/User";
+import { createConnection } from "typeorm";
+import { Product } from "./entities/Product";
 
 const main = async () => {
-  sendEmail("bob@bob.com", "hello there");
-  const orm = await MikroORM.init(microConfig);
-  //await orm.em.nativeDelete(User, {});
-  //await orm.getMigrator().up();
-  await orm.em.getDriver().createCollections();
+  const conn = createConnection({
+    type: "mysql",
+    host: "localhost",
+    port: 3306,
+    username: "root",
+    password: "yourpasswd",
+    database: "grass",
+    logging: true,
+    synchronize: true,
+    entities: [Product, User],
+  });
 
   const app = express();
 
@@ -53,7 +59,7 @@ const main = async () => {
       resolvers: [UserResolver, ProductResolver],
       validate: false,
     }),
-    context: ({ req, res }): MyContext => ({ em: orm.em, req, res, redis }),
+    context: ({ req, res }): MyContext => ({ req, res, redis }),
   });
 
   apolloServer.applyMiddleware({

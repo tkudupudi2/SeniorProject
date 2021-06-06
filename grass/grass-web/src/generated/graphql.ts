@@ -71,17 +71,17 @@ export type MutationUpdateProductArgs = {
   image: Scalars['String'];
   price: Scalars['Float'];
   name: Scalars['String'];
-  _id: Scalars['String'];
+  id: Scalars['Float'];
 };
 
 
 export type MutationDeleteProductArgs = {
-  _id: Scalars['String'];
+  id: Scalars['String'];
 };
 
 export type Product = {
   __typename?: 'Product';
-  _id: Scalars['String'];
+  id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   name: Scalars['String'];
@@ -96,21 +96,22 @@ export type Product = {
 export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
-  product?: Maybe<Product>;
   products: Array<Product>;
+  product: Array<Product>;
 };
 
 
 export type QueryProductArgs = {
-  _id: Scalars['String'];
+  id: Scalars['String'];
 };
 
 export type User = {
   __typename?: 'User';
-  _id: Scalars['String'];
+  id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   username: Scalars['String'];
+  password: Scalars['String'];
   email: Scalars['String'];
   homeAddress: Scalars['String'];
   phoneNumber: Scalars['String'];
@@ -135,12 +136,12 @@ export type RegularErrorFragment = (
 
 export type RegularProductFragment = (
   { __typename?: 'Product' }
-  & Pick<Product, '_id' | 'name' | 'price' | 'storeName' | 'image'>
+  & Pick<Product, 'id' | 'name' | 'price' | 'storeName' | 'image'>
 );
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, '_id' | 'username'>
+  & Pick<User, 'id' | 'username'>
 );
 
 export type RegularUserResponseFragment = (
@@ -166,6 +167,16 @@ export type ChangePasswordMutation = (
     { __typename?: 'UserResponse' }
     & RegularUserResponseFragment
   ) }
+);
+
+export type ForgotPasswordMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type ForgotPasswordMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'forgotPassword'>
 );
 
 export type LoginMutationVariables = Exact<{
@@ -227,7 +238,7 @@ export type ProductsQuery = (
 
 export const RegularProductFragmentDoc = gql`
     fragment RegularProduct on Product {
-  _id
+  id
   name
   price
   storeName
@@ -236,7 +247,7 @@ export const RegularProductFragmentDoc = gql`
     `;
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
-  _id
+  id
   username
 }
     `;
@@ -267,6 +278,15 @@ export const ChangePasswordDocument = gql`
 
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
+export const ForgotPasswordDocument = gql`
+    mutation ForgotPassword($email: String!) {
+  forgotPassword(email: $email)
+}
+    `;
+
+export function useForgotPasswordMutation() {
+  return Urql.useMutation<ForgotPasswordMutation, ForgotPasswordMutationVariables>(ForgotPasswordDocument);
 };
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
