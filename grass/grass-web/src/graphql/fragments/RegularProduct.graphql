@@ -2,6 +2,6 @@ fragment RegularProduct on Product {
   id
   name
   price
-  storeName
+  category
   image
 }

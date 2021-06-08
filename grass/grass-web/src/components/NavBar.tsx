@@ -41,7 +41,9 @@ import {
 } from "react-icons/bs";
 import { isServer } from "../utils/isServer";
 
-export const NavBar = () => {
+interface NavBarProps {}
+
+export const NavBar: React.FC<NavBarProps> = ({}) => {
   const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
   const [{ data, fetching }] = useMeQuery({
     pause: isServer(),
@@ -87,7 +89,17 @@ export const NavBar = () => {
   }
 
   return (
-    <Center w="100%" p={4} ml={"auto"} mb={4} boxShadow="base" bg="#97CF6E">
+    <Center
+      zIndex={1}
+      position="sticky"
+      top={0}
+      w="100%"
+      p={4}
+      ml={"auto"}
+      mb={4}
+      boxShadow="base"
+      bg="#97CF6E"
+    >
       <Menu>
         <MenuButton
           as={IconButton}

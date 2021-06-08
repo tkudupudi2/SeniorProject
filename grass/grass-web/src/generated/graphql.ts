@@ -56,22 +56,13 @@ export type MutationLoginArgs = {
 
 
 export type MutationCreateProductArgs = {
-  weight?: Maybe<Scalars['Float']>;
-  pricePerPound?: Maybe<Scalars['Float']>;
-  category: Scalars['String'];
-  storeName: Scalars['String'];
-  image: Scalars['String'];
-  price: Scalars['Float'];
-  name: Scalars['String'];
+  input: ProductInput;
 };
 
 
 export type MutationUpdateProductArgs = {
-  storeName: Scalars['String'];
-  image: Scalars['String'];
-  price: Scalars['Float'];
-  name: Scalars['String'];
   id: Scalars['Float'];
+  input: ProductInput;
 };
 
 
@@ -82,15 +73,23 @@ export type MutationDeleteProductArgs = {
 export type Product = {
   __typename?: 'Product';
   id: Scalars['Float'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
   name: Scalars['String'];
   category: Scalars['String'];
   image: Scalars['String'];
-  storeName: Scalars['String'];
+  storeId: Scalars['Float'];
   price: Scalars['Float'];
   pricePerPound: Scalars['Float'];
   weight: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type ProductInput = {
+  name: Scalars['String'];
+  price: Scalars['Float'];
+  image: Scalars['String'];
+  category: Scalars['String'];
+  storeId: Scalars['Float'];
 };
 
 export type Query = {
@@ -136,7 +135,7 @@ export type RegularErrorFragment = (
 
 export type RegularProductFragment = (
   { __typename?: 'Product' }
-  & Pick<Product, 'id' | 'name' | 'price' | 'storeName' | 'image'>
+  & Pick<Product, 'id' | 'name' | 'price' | 'category' | 'image'>
 );
 
 export type RegularUserFragment = (
@@ -166,6 +165,19 @@ export type ChangePasswordMutation = (
   & { changePassword: (
     { __typename?: 'UserResponse' }
     & RegularUserResponseFragment
+  ) }
+);
+
+export type CreateProductMutationVariables = Exact<{
+  input: ProductInput;
+}>;
+
+
+export type CreateProductMutation = (
+  { __typename?: 'Mutation' }
+  & { createProduct: (
+    { __typename?: 'Product' }
+    & RegularProductFragment
   ) }
 );
 
@@ -241,7 +253,7 @@ export const RegularProductFragmentDoc = gql`
   id
   name
   price
-  storeName
+  category
   image
 }
     `;
@@ -278,6 +290,17 @@ export const ChangePasswordDocument = gql`
 
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
+export const CreateProductDocument = gql`
+    mutation CreateProduct($input: ProductInput!) {
+  createProduct(input: $input) {
+    ...RegularProduct
+  }
+}
+    ${RegularProductFragmentDoc}`;
+
+export function useCreateProductMutation() {
+  return Urql.useMutation<CreateProductMutation, CreateProductMutationVariables>(CreateProductDocument);
 };
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {

@@ -6,8 +6,10 @@ import {
   BaseEntity,
   ObjectIdColumn,
   PrimaryGeneratedColumn,
+  ManyToOne,
 } from "typeorm";
 import { Field, Float, ObjectType } from "type-graphql";
+import { Store } from "./Store";
 
 @ObjectType()
 @Entity()
@@ -15,14 +17,6 @@ export class Product extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
-
-  @Field(() => String)
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt: Date;
 
   @Field()
   @Column()
@@ -38,17 +32,28 @@ export class Product extends BaseEntity {
 
   @Field()
   @Column()
-  storeName!: string;
+  storeId: number;
 
-  @Field(() => Float)
-  @Column()
+  @ManyToOne(() => Store, (store) => store.products)
+  storeOwner: Store;
+
+  @Field()
+  @Column({ type: "float" })
   price!: number;
 
   @Field()
-  @Column({ nullable: true })
-  pricePerPound?: number;
+  @Column({ default: 0 })
+  pricePerPound!: number;
 
   @Field()
-  @Column({ nullable: true })
-  weight?: number;
+  @Column({ default: 0 })
+  weight!: number;
+
+  @Field(() => String)
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Field(() => String)
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

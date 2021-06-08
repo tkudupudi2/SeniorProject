@@ -14,6 +14,7 @@ import { sendEmail } from "./utils/sendEmail";
 import { User } from "./entities/User";
 import { createConnection } from "typeorm";
 import { Product } from "./entities/Product";
+import { Store } from "./entities/Store";
 
 const main = async () => {
   const conn = createConnection({
@@ -25,7 +26,7 @@ const main = async () => {
     database: "grass",
     logging: true,
     synchronize: true,
-    entities: [Product, User],
+    entities: [Product, User, Store],
   });
 
   const app = express();

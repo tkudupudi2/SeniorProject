@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Product = void 0;
 const typeorm_1 = require("typeorm");
 const type_graphql_1 = require("type-graphql");
+const Store_1 = require("./Store");
 let Product = class Product extends typeorm_1.BaseEntity {
 };
 __decorate([
@@ -19,16 +20,6 @@ __decorate([
     typeorm_1.PrimaryGeneratedColumn(),
     __metadata("design:type", Number)
 ], Product.prototype, "id", void 0);
-__decorate([
-    type_graphql_1.Field(() => String),
-    typeorm_1.CreateDateColumn(),
-    __metadata("design:type", Date)
-], Product.prototype, "createdAt", void 0);
-__decorate([
-    type_graphql_1.Field(() => String),
-    typeorm_1.UpdateDateColumn(),
-    __metadata("design:type", Date)
-], Product.prototype, "updatedAt", void 0);
 __decorate([
     type_graphql_1.Field(),
     typeorm_1.Column(),
@@ -47,23 +38,37 @@ __decorate([
 __decorate([
     type_graphql_1.Field(),
     typeorm_1.Column(),
-    __metadata("design:type", String)
-], Product.prototype, "storeName", void 0);
+    __metadata("design:type", Number)
+], Product.prototype, "storeId", void 0);
 __decorate([
-    type_graphql_1.Field(() => type_graphql_1.Float),
-    typeorm_1.Column(),
+    typeorm_1.ManyToOne(() => Store_1.Store, (store) => store.products),
+    __metadata("design:type", Store_1.Store)
+], Product.prototype, "storeOwner", void 0);
+__decorate([
+    type_graphql_1.Field(),
+    typeorm_1.Column({ type: "float" }),
     __metadata("design:type", Number)
 ], Product.prototype, "price", void 0);
 __decorate([
     type_graphql_1.Field(),
-    typeorm_1.Column({ nullable: true }),
+    typeorm_1.Column({ default: 0 }),
     __metadata("design:type", Number)
 ], Product.prototype, "pricePerPound", void 0);
 __decorate([
     type_graphql_1.Field(),
-    typeorm_1.Column({ nullable: true }),
+    typeorm_1.Column({ default: 0 }),
     __metadata("design:type", Number)
 ], Product.prototype, "weight", void 0);
+__decorate([
+    type_graphql_1.Field(() => String),
+    typeorm_1.CreateDateColumn(),
+    __metadata("design:type", Date)
+], Product.prototype, "createdAt", void 0);
+__decorate([
+    type_graphql_1.Field(() => String),
+    typeorm_1.UpdateDateColumn(),
+    __metadata("design:type", Date)
+], Product.prototype, "updatedAt", void 0);
 Product = __decorate([
     type_graphql_1.ObjectType(),
     typeorm_1.Entity()

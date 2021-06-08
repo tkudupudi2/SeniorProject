@@ -1,11 +1,53 @@
-import { Resolver, Query, Ctx, Arg, Mutation } from "type-graphql";
+import { isAuth } from "../middleware/isAuth";
+import {
+  Resolver,
+  Query,
+  Ctx,
+  Arg,
+  Mutation,
+  InputType,
+  Field,
+  UseMiddleware,
+  Int,
+  Float,
+} from "type-graphql";
 import { Product } from "../entities/Product";
+import { cursorTo } from "readline";
+import { getConnection } from "typeorm";
+
+@InputType()
+class ProductInput {
+  @Field()
+  name: string;
+  @Field()
+  price: number;
+  @Field()
+  image: string;
+  @Field()
+  category: string;
+  @Field()
+  storeId: number;
+}
 
 @Resolver()
 export class ProductResolver {
   @Query(() => [Product])
-  products(): Promise<Product[]> {
-    return Product.find();
+  products(
+    @Arg("limit") limit: number,
+    @Arg("cursor", () => Float, { nullable: true }) cursor: number | null
+  ): Promise<Product[]> {
+    const realLimit = Math.min(25, limit);
+    const qb = getConnection()
+      .getRepository(Product)
+      .createQueryBuilder("p")
+      .orderBy("price", "DESC")
+      .take(realLimit);
+
+    if (cursor) {
+      qb.where("price < :cursor", { cursor });
+    }
+
+    return qb.getMany();
   }
 
   @Query(() => [Product])
@@ -14,40 +56,24 @@ export class ProductResolver {
   }
 
   @Mutation(() => Product)
-  async createProduct(
-    @Arg("name") name: string,
-    @Arg("price") price: number,
-    @Arg("image") image: string,
-    @Arg("storeName") storeName: string,
-    @Arg("category") category: string,
-    @Arg("pricePerPound", { nullable: true }) pricePerPound: number,
-    @Arg("weight", { nullable: true }) weight: number
-  ): Promise<Product> {
+  @UseMiddleware(isAuth)
+  async createProduct(@Arg("input") input: ProductInput): Promise<Product> {
     return Product.create({
-      name,
-      price,
-      image,
-      storeName,
-      category,
-      pricePerPound,
-      weight,
+      ...input,
     }).save();
   }
 
   @Mutation(() => Product, { nullable: true })
   async updateProduct(
-    @Arg("id") id: number,
-    @Arg("name") name: string,
-    @Arg("price") price: number,
-    @Arg("image") image: string,
-    @Arg("storeName") storeName: string
+    @Arg("input") input: ProductInput,
+    @Arg("id") id: number
   ): Promise<Product | null> {
     const product = await Product.findOne(id);
     if (!product) {
       return null;
     }
     if (typeof name !== "undefined") {
-      await Product.update({ id }, { name, price, image, storeName });
+      await Product.update({ id });
     }
     return product;
   }

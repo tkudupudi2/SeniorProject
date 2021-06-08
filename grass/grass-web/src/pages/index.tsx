@@ -22,12 +22,12 @@ import { withUrqlClient } from "next-urql";
 import { useProductsQuery } from "../generated/graphql";
 import { BsStar } from "react-icons/bs";
 import { RiMoneyDollarBoxFill } from "react-icons/ri";
+import { Layout } from "../components/Layout";
 
 const Index = () => {
   const [{ data }] = useProductsQuery();
   return (
-    <>
-      <NavBar />
+    <Layout>
       <Center>
         <Image
           boxSize="100px"
@@ -86,7 +86,11 @@ const Index = () => {
                     </Button>
                   </GridItem>
                   <GridItem colSpan={1}>
-                    <IconButton colorScheme="yellow" icon={<BsStar />}>
+                    <IconButton
+                      aria-label="Favorite Item"
+                      colorScheme="yellow"
+                      icon={<BsStar />}
+                    >
                       Favorite
                     </IconButton>
                   </GridItem>
@@ -96,7 +100,7 @@ const Index = () => {
           ))
         )}
       </SimpleGrid>
-    </>
+    </Layout>
   );
 };
 
