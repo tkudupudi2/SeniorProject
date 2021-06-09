@@ -100,6 +100,12 @@ export type Query = {
 };
 
 
+export type QueryProductsArgs = {
+  cursor?: Maybe<Scalars['Float']>;
+  limit: Scalars['Int'];
+};
+
+
 export type QueryProductArgs = {
   id: Scalars['String'];
 };
@@ -237,7 +243,10 @@ export type MeQuery = (
   )> }
 );
 
-export type ProductsQueryVariables = Exact<{ [key: string]: never; }>;
+export type ProductsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['Float']>;
+}>;
 
 
 export type ProductsQuery = (
@@ -354,8 +363,8 @@ export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'q
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 };
 export const ProductsDocument = gql`
-    query Products {
-  products {
+    query Products($limit: Int!, $cursor: Float) {
+  products(cursor: $cursor, limit: $limit) {
     ...RegularProduct
   }
 }

@@ -1,5 +1,5 @@
-query Products {
-  products {
+query Products($limit: Int!, $cursor: Float) {
+  products(cursor: $cursor, limit: $limit) {
     ...RegularProduct
   }
 }

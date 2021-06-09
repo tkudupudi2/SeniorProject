@@ -33,7 +33,7 @@ class ProductInput {
 export class ProductResolver {
   @Query(() => [Product])
   products(
-    @Arg("limit") limit: number,
+    @Arg("limit", () => Int) limit: number,
     @Arg("cursor", () => Float, { nullable: true }) cursor: number | null
   ): Promise<Product[]> {
     const realLimit = Math.min(25, limit);

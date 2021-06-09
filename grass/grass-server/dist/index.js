@@ -30,10 +30,10 @@ const Store_1 = require("./entities/Store");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const conn = typeorm_1.createConnection({
         type: "mysql",
-        host: "localhost",
+        host: "database-2.ccugqgsv5rij.us-east-2.rds.amazonaws.com",
         port: 3306,
-        username: "root",
-        password: "yourpasswd",
+        username: "admin",
+        password: "rootroot",
         database: "grass",
         logging: true,
         synchronize: true,

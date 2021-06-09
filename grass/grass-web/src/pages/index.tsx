@@ -25,7 +25,11 @@ import { RiMoneyDollarBoxFill } from "react-icons/ri";
 import { Layout } from "../components/Layout";
 
 const Index = () => {
-  const [{ data }] = useProductsQuery();
+  const [{ data }] = useProductsQuery({
+    variables: {
+      limit: 10,
+    },
+  });
   return (
     <Layout>
       <Center>

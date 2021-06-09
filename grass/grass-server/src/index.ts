@@ -19,10 +19,10 @@ import { Store } from "./entities/Store";
 const main = async () => {
   const conn = createConnection({
     type: "mysql",
-    host: "localhost",
+    host: "database-2.ccugqgsv5rij.us-east-2.rds.amazonaws.com",
     port: 3306,
-    username: "root",
-    password: "yourpasswd",
+    username: "admin",
+    password: "rootroot",
     database: "grass",
     logging: true,
     synchronize: true,

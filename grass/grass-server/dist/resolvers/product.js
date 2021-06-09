@@ -93,7 +93,7 @@ let ProductResolver = class ProductResolver {
 };
 __decorate([
     type_graphql_1.Query(() => [Product_1.Product]),
-    __param(0, type_graphql_1.Arg("limit")),
+    __param(0, type_graphql_1.Arg("limit", () => type_graphql_1.Int)),
     __param(1, type_graphql_1.Arg("cursor", () => type_graphql_1.Float, { nullable: true })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Object]),
