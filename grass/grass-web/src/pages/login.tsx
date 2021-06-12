@@ -67,7 +67,13 @@ const Login: React.FC<{}> = ({}) => {
               mt={4}
               type="submit"
               isLoading={isSubmitting}
-              colorScheme="whatsapp"
+              colorScheme={"green"}
+              color="white"
+              bg={"green.400"}
+              px={6}
+              _hover={{
+                bg: "green.500",
+              }}
             >
               login
             </Button>

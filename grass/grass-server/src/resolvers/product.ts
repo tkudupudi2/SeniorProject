@@ -10,6 +10,8 @@ import {
   UseMiddleware,
   Int,
   Float,
+  FieldResolver,
+  Root,
 } from "type-graphql";
 import { Product } from "../entities/Product";
 import { cursorTo } from "readline";
@@ -29,10 +31,15 @@ class ProductInput {
   storeId: number;
 }
 
-@Resolver()
+@Resolver(Product)
 export class ProductResolver {
+  @FieldResolver(() => String)
+  priceFormat(@Root() root: Product) {
+    return root.price.toFixed(2);
+  }
+
   @Query(() => [Product])
-  products(
+  async products(
     @Arg("limit", () => Int) limit: number,
     @Arg("cursor", () => Float, { nullable: true }) cursor: number | null
   ): Promise<Product[]> {
@@ -72,8 +79,8 @@ export class ProductResolver {
     if (!product) {
       return null;
     }
-    if (typeof name !== "undefined") {
-      await Product.update({ id });
+    if (typeof input.name !== "undefined") {
+      await Product.update({ id }, input);
     }
     return product;
   }

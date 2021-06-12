@@ -56,7 +56,13 @@ const Register: React.FC<registerProps> = ({}) => {
               mt={4}
               type="submit"
               isLoading={isSubmitting}
-              colorScheme="green"
+              colorScheme={"green"}
+              color="white"
+              bg={"green.400"}
+              px={6}
+              _hover={{
+                bg: "green.500",
+              }}
             >
               register
             </Button>

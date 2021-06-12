@@ -52,17 +52,22 @@ ProductInput = __decorate([
     type_graphql_1.InputType()
 ], ProductInput);
 let ProductResolver = class ProductResolver {
+    priceFormat(root) {
+        return root.price.toFixed(2);
+    }
     products(limit, cursor) {
-        const realLimit = Math.min(25, limit);
-        const qb = typeorm_1.getConnection()
-            .getRepository(Product_1.Product)
-            .createQueryBuilder("p")
-            .orderBy("price", "DESC")
-            .take(realLimit);
-        if (cursor) {
-            qb.where("price < :cursor", { cursor });
-        }
-        return qb.getMany();
+        return __awaiter(this, void 0, void 0, function* () {
+            const realLimit = Math.min(25, limit);
+            const qb = typeorm_1.getConnection()
+                .getRepository(Product_1.Product)
+                .createQueryBuilder("p")
+                .orderBy("price", "DESC")
+                .take(realLimit);
+            if (cursor) {
+                qb.where("price < :cursor", { cursor });
+            }
+            return qb.getMany();
+        });
     }
     product(id) {
         return Product_1.Product.findOne(id);
@@ -78,8 +83,8 @@ let ProductResolver = class ProductResolver {
             if (!product) {
                 return null;
             }
-            if (typeof name !== "undefined") {
-                yield Product_1.Product.update({ id });
+            if (typeof input.name !== "undefined") {
+                yield Product_1.Product.update({ id }, input);
             }
             return product;
         });
@@ -91,6 +96,13 @@ let ProductResolver = class ProductResolver {
         });
     }
 };
+__decorate([
+    type_graphql_1.FieldResolver(() => String),
+    __param(0, type_graphql_1.Root()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Product_1.Product]),
+    __metadata("design:returntype", void 0)
+], ProductResolver.prototype, "priceFormat", null);
 __decorate([
     type_graphql_1.Query(() => [Product_1.Product]),
     __param(0, type_graphql_1.Arg("limit", () => type_graphql_1.Int)),
@@ -130,7 +142,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProductResolver.prototype, "deleteProduct", null);
 ProductResolver = __decorate([
-    type_graphql_1.Resolver()
+    type_graphql_1.Resolver(Product_1.Product)
 ], ProductResolver);
 exports.ProductResolver = ProductResolver;
 //# sourceMappingURL=product.js.map

@@ -98,7 +98,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       ml={"auto"}
       mb={4}
       boxShadow="base"
-      bg="#97CF6E"
+      bg="green.400"
     >
       <Menu>
         <MenuButton

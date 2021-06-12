@@ -82,6 +82,7 @@ export type Product = {
   weight: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
+  priceFormat: Scalars['String'];
 };
 
 export type ProductInput = {
@@ -141,7 +142,7 @@ export type RegularErrorFragment = (
 
 export type RegularProductFragment = (
   { __typename?: 'Product' }
-  & Pick<Product, 'id' | 'name' | 'price' | 'category' | 'image'>
+  & Pick<Product, 'id' | 'name' | 'price' | 'category' | 'image' | 'priceFormat'>
 );
 
 export type RegularUserFragment = (
@@ -264,6 +265,7 @@ export const RegularProductFragmentDoc = gql`
   price
   category
   image
+  priceFormat
 }
     `;
 export const RegularUserFragmentDoc = gql`

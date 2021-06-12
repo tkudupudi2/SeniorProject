@@ -4,4 +4,5 @@ fragment RegularProduct on Product {
   price
   category
   image
+  priceFormat
 }
