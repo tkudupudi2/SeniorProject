@@ -14,6 +14,9 @@ import {
   MenuItem,
   MenuDivider,
   Heading,
+  Input,
+  InputGroup,
+  InputLeftElement,
 } from "@chakra-ui/react";
 import * as React from "react";
 import NextLink from "next/link";
@@ -28,6 +31,7 @@ import {
   EditIcon,
   ExternalLinkIcon,
   HamburgerIcon,
+  PhoneIcon,
   RepeatIcon,
   SettingsIcon,
 } from "@chakra-ui/icons";
@@ -38,6 +42,7 @@ import {
   BsStarFill,
   BsTools,
   BsListUl,
+  BsSearch,
 } from "react-icons/bs";
 import { isServer } from "../utils/isServer";
 
@@ -70,7 +75,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     body = (
       <Center>
         <Box mr={6} color="white" fontSize="sm" fontWeight="semibold">
-          Welcome, {data.me.username}
+          {data.me.username}
         </Box>
         <Spacer />
         <IconButton
@@ -118,9 +123,30 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
       <Heading ml={2} color="white" as="h1" size="lg" letterSpacing={"-.1rem"}>
         Grass
       </Heading>
-      <Text color="white" fontSize="xs" mt={2} ml={2}>
+      <Text
+        as="span"
+        whiteSpace="nowrap"
+        color="white"
+        fontSize="xs"
+        mt={2}
+        ml={2}
+      >
         The Grocery Assistant
       </Text>
+      <InputGroup ml={4} mr={4}>
+        <InputLeftElement
+          pointerEvents="none"
+          children={<BsSearch color="white" />}
+        />
+        <Input
+          placeholder=""
+          size="md"
+          fontColor="white"
+          boxShadow="md"
+          type="unstyled"
+          color="white"
+        />
+      </InputGroup>
       <Box ml="auto">{body}</Box>
     </Center>
   );

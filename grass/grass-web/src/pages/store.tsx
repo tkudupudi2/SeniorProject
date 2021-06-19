@@ -16,6 +16,7 @@ import {
   useColorModeValue,
   extendTheme,
   HStack,
+  VStack,
 } from "@chakra-ui/react";
 import { FaShoppingCart } from "react-icons/fa";
 import { withUrqlClient } from "next-urql";
@@ -26,14 +27,19 @@ import { useProductsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 export const Store = () => {
-  const [{ data }] = useProductsQuery({
+  const [{ data, fetching }] = useProductsQuery({
     variables: {
       limit: 10,
     },
   });
+
+  if (!fetching && !data) {
+    return <div>Query failed.</div>;
+  }
+
   return (
     <Layout>
-      <Flex align="center">
+      <Flex align="center" p="10">
         <Image
           boxSize="100px"
           objectFit="scale-down"
@@ -41,7 +47,9 @@ export const Store = () => {
           width="200px"
           align="left"
         />
-        <Text ml="auto">3705 El Camino Real</Text>
+        <Text ml="auto" color="grey">
+          3705 el camino real
+        </Text>
       </Flex>
       <SimpleGrid
         minChildWidth="240px"
@@ -50,10 +58,10 @@ export const Store = () => {
         textAlign="center"
         rounded="lg"
       >
-        {!data ? (
+        {fetching && !data ? (
           <Spinner size="xs" />
         ) : (
-          data.products.map((p) => (
+          data!.products.map((p) => (
             <Box
               mb={4}
               p={4}
@@ -71,42 +79,47 @@ export const Store = () => {
                 >
                   <GridItem colSpan={4}>
                     <Center>
-                      <Image
-                        boxSize="150px"
-                        borderRadius="20%"
-                        objectFit="cover"
-                        src={p.image}
-                        fallbackSrc={p.image}
-                        alt={p.name}
-                      />
+                      <VStack>
+                        <Text fontSize="sm">{p.name}</Text>
+
+                        <Image
+                          boxSize="150px"
+                          boxShadow="xl"
+                          borderRadius="20%"
+                          objectFit="cover"
+                          src={p.image}
+                          fallbackSrc={p.image}
+                          alt={p.name}
+                        />
+                      </VStack>
                     </Center>
                   </GridItem>
 
-                  <GridItem colSpan={4} ml="auto">
-                    <Center>
-                      <HStack>
+                  <GridItem colSpan={4}>
+                    <Center ml="auto"></Center>
+                  </GridItem>
+                  <GridItem colSpan={2} mt="auto">
+                    <HStack>
+                      <Text
+                        as={"span"}
+                        color="green.400"
+                        fontSize="xs"
+                        fontWeight="semibold"
+                      >
+                        ${""}
                         <Text
+                          ml={0.5}
                           as={"span"}
-                          color="green.400"
-                          fontSize="xs"
-                          fontWeight="semibold"
+                          color="black"
+                          fontSize="lg"
+                          fontWeight="bold"
                         >
-                          ${""}
-                          <Text
-                            ml={0.5}
-                            as={"span"}
-                            color="black"
-                            fontSize="lg"
-                            fontWeight="bold"
-                          >
-                            {p.priceFormat}
-                          </Text>
+                          {p.priceFormat}
                         </Text>
-                      </HStack>
-                    </Center>
+                      </Text>
+                    </HStack>
                   </GridItem>
-
-                  <GridItem colSpan={3}>
+                  <GridItem colSpan={2}>
                     <IconButton
                       aria-label="Add to cart"
                       colorScheme="green"
@@ -118,24 +131,33 @@ export const Store = () => {
                       boxShadow="md"
                     />
                   </GridItem>
-                  <GridItem colSpan={1}>
-                    <IconButton
-                      aria-label="Add to cart"
-                      colorScheme="yellow"
-                      bg="yellow.300"
-                      color="white"
-                      isFullWidth={true}
-                      rounded="full"
-                      icon={<BsStarFill />}
-                      boxShadow="md"
-                    />
-                  </GridItem>
                 </Grid>
               </Center>
             </Box>
           ))
         )}
       </SimpleGrid>
+
+      {data ? (
+        <Center>
+          <Button
+            my={8}
+            isLoading={fetching}
+            colorScheme={"green"}
+            color="white"
+            bg="linear-gradient(130deg, hsl(152, 58%, 53%), #00b698)"
+            px={6}
+            _hover={{
+              bg: "linear-gradient(130deg, hsl(152, 58%, 53%), #00b698)",
+            }}
+            shadow="0 25px 25px -20px hsla(152, 58%, 53%, 0.66) !important"
+            rounded="full"
+            boxShadow="md"
+          >
+            Load More
+          </Button>
+        </Center>
+      ) : null}
     </Layout>
   );
 };
