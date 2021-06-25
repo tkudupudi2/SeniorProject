@@ -9,7 +9,9 @@ import {
   ObjectIdColumn,
   ObjectID,
   ManyToOne,
+  OneToMany,
 } from "typeorm";
+import { Product } from "./Product";
 
 @ObjectType()
 @Entity()
@@ -29,6 +31,9 @@ export class Store extends BaseEntity {
   @Field(() => String)
   @Column()
   address!: string;
+
+  @OneToMany(() => Product, (product) => product.storeOwner)
+  products: Product[];
 
   @Field(() => String)
   @CreateDateColumn()
