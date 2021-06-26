@@ -1,4 +1,9 @@
-import { dedupExchange, Exchange, fetchExchange } from "urql";
+import {
+  dedupExchange,
+  Exchange,
+  fetchExchange,
+  stringifyVariables,
+} from "urql";
 import { cacheExchange, Resolver } from "@urql/exchange-graphcache";
 import {
   LogoutMutation,
@@ -33,6 +38,11 @@ export const cursorPagination = (): Resolver => {
       return undefined;
     }
 
+    const isItInCache = cache.resolve(
+      entityKey,
+      `${fieldName}(${stringifyVariables(fieldArgs)})`
+    );
+    info.partial = !isItInCache;
     const results: string[] = [];
     fieldInfos.forEach((fi) => {
       const data = cache.resolve(entityKey, fi.fieldKey) as string[];

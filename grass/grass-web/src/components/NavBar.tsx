@@ -37,6 +37,7 @@ import {
   SettingsIcon,
 } from "@chakra-ui/icons";
 import { RiLogoutBoxRLine } from "react-icons/ri";
+import { AiOutlineShoppingCart } from "react-icons/ai";
 import {
   BsFillHouseDoorFill,
   BsPuzzleFill,
@@ -46,6 +47,7 @@ import {
   BsSearch,
 } from "react-icons/bs";
 import { isServer } from "../utils/isServer";
+import { useRouter } from "next/router";
 
 interface NavBarProps {}
 
@@ -54,6 +56,8 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
   const [{ data, fetching }] = useMeQuery({
     pause: isServer(),
   });
+
+  const router = useRouter();
 
   let body = null;
   if (fetching) {
@@ -90,24 +94,42 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
               />
             </MenuButton>
             <MenuList bg="linear-gradient(130deg, hsl(152, 58%, 53%), #00b698)">
-              <MenuItem>Link 1</MenuItem>
-              <MenuItem>Link 2</MenuItem>
+              <MenuItem>Profile</MenuItem>
+              <MenuItem>Settings</MenuItem>
               <MenuDivider />
-              <MenuItem>Link 3</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  logout();
+                }}
+              >
+                Logout
+              </MenuItem>
             </MenuList>
           </Menu>
         </Box>
-        <Spacer />
         <IconButton
-          variant="outline"
+          aria-label="logout"
+          color="white"
+          size="xs"
+          bg="transparent"
+          onClick={() => {
+            router.push("/cart");
+          }}
+          as={AiOutlineShoppingCart}
+          mt={0.5}
+          mr={6}
+        />
+        <IconButton
           aria-label="logout"
           onClick={() => {
             logout();
           }}
           color="white"
+          bg="transparent"
           size="xs"
           as={RiLogoutBoxRLine}
           mt={0.5}
+          mr={6}
         />
       </Center>
     );

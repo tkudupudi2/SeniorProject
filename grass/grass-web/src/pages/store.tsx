@@ -17,6 +17,10 @@ import {
   extendTheme,
   HStack,
   VStack,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
 } from "@chakra-ui/react";
 import { FaShoppingCart } from "react-icons/fa";
 import { withUrqlClient } from "next-urql";
@@ -25,12 +29,17 @@ import { BsStar, BsStarFill } from "react-icons/bs";
 import { Layout } from "../components/Layout";
 import { useProductsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import { useState } from "react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 export const Store = () => {
+  const [variables, setVariables] = useState({
+    limit: 5,
+    cursor: null as null | number,
+  });
+
   const [{ data, fetching }] = useProductsQuery({
-    variables: {
-      limit: 10,
-    },
+    variables,
   });
 
   if (!fetching && !data) {
@@ -47,9 +56,34 @@ export const Store = () => {
           width="200px"
           align="left"
         />
-        <Text ml="auto" color="grey">
-          3705 el camino real
-        </Text>
+        <HStack ml="auto">
+          <Menu>
+            <MenuButton
+              px={4}
+              py={2}
+              transition="all 0.2s"
+              borderRadius="md"
+              borderWidth="1px"
+              _hover={{ bg: "gray.400" }}
+              _focus={{ boxShadow: "outline" }}
+              mr={4}
+            >
+              Sort By <ChevronDownIcon />
+            </MenuButton>
+            <MenuList
+              borderRadius="md"
+              borderWidth="1px"
+              bg="white"
+              boxShadow="sm"
+            >
+              <MenuItem>Sort By Price (Desc)</MenuItem>
+              <MenuItem>Sort By Price (Ascd)</MenuItem>
+            </MenuList>
+          </Menu>
+          <Text color="grey" textAlign="right">
+            3705 El Camino Real<br></br> Mountain View, CA
+          </Text>
+        </HStack>
       </Flex>
       <SimpleGrid
         minChildWidth="240px"
@@ -153,6 +187,12 @@ export const Store = () => {
             shadow="0 25px 25px -20px hsla(152, 58%, 53%, 0.66) !important"
             rounded="full"
             boxShadow="md"
+            onClick={() => {
+              setVariables({
+                limit: variables.limit,
+                cursor: data.products[data.products.length - 1].price,
+              });
+            }}
           >
             Load More
           </Button>
