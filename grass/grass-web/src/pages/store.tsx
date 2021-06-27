@@ -78,6 +78,8 @@ export const Store = () => {
             >
               <MenuItem>Sort By Price (Desc)</MenuItem>
               <MenuItem>Sort By Price (Ascd)</MenuItem>
+              <MenuItem>Sort By Category (Desc)</MenuItem>
+              <MenuItem>Sort By Category (Ascd)</MenuItem>
             </MenuList>
           </Menu>
           <Text color="grey" textAlign="right">
@@ -197,7 +199,9 @@ export const Store = () => {
             Load More
           </Button>
         </Center>
-      ) : null}
+      ) : (
+        <Spinner size="xs" />
+      )}
     </Layout>
   );
 };
