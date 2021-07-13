@@ -1,5 +1,8 @@
 query Products($limit: Int!, $cursor: Float) {
   products(cursor: $cursor, limit: $limit) {
-    ...RegularProduct
+    hasMore
+    products {
+      ...RegularProduct
+    }
   }
 }

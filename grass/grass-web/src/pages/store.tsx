@@ -97,7 +97,7 @@ export const Store = () => {
         {fetching && !data ? (
           <Spinner size="xs" />
         ) : (
-          data!.products.map((p) => (
+          data!.products.products.map((p) => (
             <Box
               mb={4}
               p={4}
@@ -174,7 +174,7 @@ export const Store = () => {
         )}
       </SimpleGrid>
 
-      {data ? (
+      {data && data.products.hasMore ? (
         <Center>
           <Button
             my={8}
@@ -192,16 +192,16 @@ export const Store = () => {
             onClick={() => {
               setVariables({
                 limit: variables.limit,
-                cursor: data.products[data.products.length - 1].price,
+                cursor:
+                  data.products.products[data.products.products.length - 1]
+                    .price,
               });
             }}
           >
             Load More
           </Button>
         </Center>
-      ) : (
-        <Spinner size="xs" />
-      )}
+      ) : null}
     </Layout>
   );
 };

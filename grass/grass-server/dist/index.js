@@ -27,6 +27,7 @@ const User_1 = require("./entities/User");
 const typeorm_1 = require("typeorm");
 const Product_1 = require("./entities/Product");
 const Store_1 = require("./entities/Store");
+const Cart_1 = require("./entities/Cart");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const conn = typeorm_1.createConnection({
         type: "mysql",
@@ -37,7 +38,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         database: "grass",
         logging: true,
         synchronize: true,
-        entities: [Product_1.Product, User_1.User, Store_1.Store],
+        entities: [Cart_1.Cart, Product_1.Product, User_1.User, Store_1.Store],
     });
     const app = express_1.default();
     const RedisStore = connect_redis_1.default(express_session_1.default);

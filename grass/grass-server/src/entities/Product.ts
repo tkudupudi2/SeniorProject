@@ -7,9 +7,13 @@ import {
   ObjectIdColumn,
   PrimaryGeneratedColumn,
   ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
 import { Field, Float, ObjectType } from "type-graphql";
 import { Store } from "./Store";
+import { User } from "./User";
+import { Cart } from "./Cart";
 
 @ObjectType()
 @Entity()

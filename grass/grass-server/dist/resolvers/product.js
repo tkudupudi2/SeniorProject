@@ -51,13 +51,26 @@ __decorate([
 ProductInput = __decorate([
     type_graphql_1.InputType()
 ], ProductInput);
+let PaginatedProducts = class PaginatedProducts {
+};
+__decorate([
+    type_graphql_1.Field(() => [Product_1.Product]),
+    __metadata("design:type", Array)
+], PaginatedProducts.prototype, "products", void 0);
+__decorate([
+    type_graphql_1.Field(),
+    __metadata("design:type", Boolean)
+], PaginatedProducts.prototype, "hasMore", void 0);
+PaginatedProducts = __decorate([
+    type_graphql_1.ObjectType()
+], PaginatedProducts);
 let ProductResolver = class ProductResolver {
     priceFormat(root) {
         return root.price.toFixed(2);
     }
     products(limit, cursor) {
         return __awaiter(this, void 0, void 0, function* () {
-            const realLimit = Math.min(25, limit);
+            const realLimit = Math.min(25, limit) + 1;
             const qb = typeorm_1.getConnection()
                 .getRepository(Product_1.Product)
                 .createQueryBuilder("p")
@@ -66,7 +79,11 @@ let ProductResolver = class ProductResolver {
             if (cursor) {
                 qb.where("price < :cursor", { cursor });
             }
-            return qb.getMany();
+            const products = yield qb.getMany();
+            return {
+                products: products.slice(0, realLimit - 1),
+                hasMore: products.length === realLimit,
+            };
         });
     }
     product(id) {
@@ -104,7 +121,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ProductResolver.prototype, "priceFormat", null);
 __decorate([
-    type_graphql_1.Query(() => [Product_1.Product]),
+    type_graphql_1.Query(() => PaginatedProducts),
     __param(0, type_graphql_1.Arg("limit", () => type_graphql_1.Int)),
     __param(1, type_graphql_1.Arg("cursor", () => type_graphql_1.Float, { nullable: true })),
     __metadata("design:type", Function),

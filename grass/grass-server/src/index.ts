@@ -15,6 +15,7 @@ import { User } from "./entities/User";
 import { createConnection } from "typeorm";
 import { Product } from "./entities/Product";
 import { Store } from "./entities/Store";
+import { Cart } from "./entities/Cart";
 
 const main = async () => {
   const conn = createConnection({
@@ -26,7 +27,7 @@ const main = async () => {
     database: "grass",
     logging: true,
     synchronize: true,
-    entities: [Product, User, Store],
+    entities: [Cart, Product, User, Store],
   });
 
   const app = express();

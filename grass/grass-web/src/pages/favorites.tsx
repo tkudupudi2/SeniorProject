@@ -55,7 +55,7 @@ export const Favorites = () => {
         {fetching && !data ? (
           <Spinner size="xs" />
         ) : (
-          data!.products.map((p) => (
+          data!.products.products.map((p) => (
             <Box
               mb={4}
               p={4}

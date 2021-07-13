@@ -38,19 +38,30 @@ export const cursorPagination = (): Resolver => {
       return undefined;
     }
 
+    const fieldKey = `${fieldName}(${stringifyVariables(fieldArgs)})`;
     const isItInCache = cache.resolve(
-      entityKey,
-      `${fieldName}(${stringifyVariables(fieldArgs)})`
+      cache.resolve(entityKey, fieldKey) as string,
+      "products"
     );
     info.partial = !isItInCache;
+    let hasMore = true;
     const results: string[] = [];
     fieldInfos.forEach((fi) => {
-      const data = cache.resolve(entityKey, fi.fieldKey) as string[];
+      const key = cache.resolve(entityKey, fi.fieldKey) as string;
+      const data = cache.resolve(key, "products") as string[];
+      const _hasMore = cache.resolve(key, "hasMore");
+      if (!_hasMore) {
+        hasMore = _hasMore as boolean;
+      }
       results.push(...data);
       console.log(data);
     });
 
-    return results;
+    return {
+      __typename: "PaginatedProducts",
+      hasMore,
+      products: results,
+    };
 
     //   const visited = new Set();
     //   let result: NullArray<string> = [];

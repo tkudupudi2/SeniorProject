@@ -12,6 +12,7 @@ import {
   Float,
   FieldResolver,
   Root,
+  ObjectType,
 } from "type-graphql";
 import { Product } from "../entities/Product";
 import { cursorTo } from "readline";
@@ -31,6 +32,14 @@ class ProductInput {
   storeId: number;
 }
 
+@ObjectType()
+class PaginatedProducts {
+  @Field(() => [Product])
+  products: Product[];
+  @Field()
+  hasMore: boolean;
+}
+
 @Resolver(Product)
 export class ProductResolver {
   @FieldResolver(() => String)
@@ -38,12 +47,12 @@ export class ProductResolver {
     return root.price.toFixed(2);
   }
 
-  @Query(() => [Product])
+  @Query(() => PaginatedProducts)
   async products(
     @Arg("limit", () => Int) limit: number,
     @Arg("cursor", () => Float, { nullable: true }) cursor: number | null
-  ): Promise<Product[]> {
-    const realLimit = Math.min(25, limit);
+  ): Promise<PaginatedProducts> {
+    const realLimit = Math.min(25, limit) + 1;
     const qb = getConnection()
       .getRepository(Product)
       .createQueryBuilder("p")
@@ -54,7 +63,12 @@ export class ProductResolver {
       qb.where("price < :cursor", { cursor });
     }
 
-    return qb.getMany();
+    const products = await qb.getMany();
+
+    return {
+      products: products.slice(0, realLimit - 1),
+      hasMore: products.length === realLimit,
+    };
   }
 
   @Query(() => [Product])

@@ -70,6 +70,12 @@ export type MutationDeleteProductArgs = {
   id: Scalars['String'];
 };
 
+export type PaginatedProducts = {
+  __typename?: 'PaginatedProducts';
+  products: Array<Product>;
+  hasMore: Scalars['Boolean'];
+};
+
 export type Product = {
   __typename?: 'Product';
   id: Scalars['Float'];
@@ -96,7 +102,7 @@ export type ProductInput = {
 export type Query = {
   __typename?: 'Query';
   me?: Maybe<User>;
-  products: Array<Product>;
+  products: PaginatedProducts;
   product: Array<Product>;
 };
 
@@ -252,10 +258,14 @@ export type ProductsQueryVariables = Exact<{
 
 export type ProductsQuery = (
   { __typename?: 'Query' }
-  & { products: Array<(
-    { __typename?: 'Product' }
-    & RegularProductFragment
-  )> }
+  & { products: (
+    { __typename?: 'PaginatedProducts' }
+    & Pick<PaginatedProducts, 'hasMore'>
+    & { products: Array<(
+      { __typename?: 'Product' }
+      & RegularProductFragment
+    )> }
+  ) }
 );
 
 export const RegularProductFragmentDoc = gql`
@@ -367,7 +377,10 @@ export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'q
 export const ProductsDocument = gql`
     query Products($limit: Int!, $cursor: Float) {
   products(cursor: $cursor, limit: $limit) {
-    ...RegularProduct
+    hasMore
+    products {
+      ...RegularProduct
+    }
   }
 }
     ${RegularProductFragmentDoc}`;
